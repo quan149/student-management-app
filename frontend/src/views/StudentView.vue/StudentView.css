@@ -1,0 +1,222 @@
+.student-table {
+  position: relative;
+}
+
+/* Hiệu ứng hover cho các dòng trong bảng */
+.student-table tr:hover {
+  background-color: #f5f5f5;
+  transition: background-color 0.3s ease;
+}
+
+.student-update-modal {
+  position: absolute;
+  background-color: rgb(255, 255, 255);
+  color: black;
+  padding: 12px 16px;
+  border-radius: 4px;
+  width: 450px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 6;
+}
+
+.student-update__header {
+  font-size: 20px;
+  padding-bottom: 12px;
+  font-weight: bold;
+  border-bottom: 1px solid black;
+  margin-top: 8px;
+}
+
+.student-update__body {
+  margin-top: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid black;
+}
+
+.student-update__info {
+  font-size: 16px;
+  text-align: justify;
+}
+
+.student-list__ids {
+  font-weight: bold;
+}
+
+.class-selection {
+  display: flex;
+  align-items: center;
+  margin-top: 8px;
+}
+
+.class-selection__label {
+  width: 160px;
+}
+
+.class-selection__dropdown {
+  height: 36px;
+  width: 180px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* Hover cho dropdown */
+.class-selection__dropdown:hover {
+  border-color: #007bff;
+}
+
+/* Active (click vào sẽ thay đổi border) */
+.class-selection__dropdown:active {
+  border-color: #0056b3;
+}
+
+.content-section {
+  margin-top: 16px;
+  text-align: justify;
+}
+
+.content-section--highlight {
+  font-weight: bold;
+  color: red;
+}
+
+.student-update__footer {
+  display: flex;
+  align-items: center;
+  justify-content: right;
+  padding: 12px 0 6px 0;
+}
+
+/* Hover cho button */
+.button-group {
+  margin-right: 8px;
+  padding: 6px 12px;
+  transition: all 0.3s ease;
+}
+
+.button-group:hover {
+  background-color: #007bff;
+  color: white;
+}
+
+.button-group:active {
+  background-color: #0056b3;
+}
+
+.student-filter {
+  background-color: rgb(255, 255, 255);
+  color: black;
+  position: absolute;
+  padding: 12px 16px;
+  margin-top: 4px;
+  border-radius: 4px;
+  width: 20%;
+  z-index: 3;
+  top: 100%;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.student-filter__header {
+  font-size: 20px;
+  font-weight: bold;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.student-filter__icon {
+  transition: color 0.3s ease;
+}
+
+/* Hover đổi màu cho icon đóng */
+.student-filter__icon:hover {
+  color: red;
+  cursor: pointer;
+}
+
+.student-filter__body {
+  padding: 12px 0;
+}
+
+.student-filter__criteria {
+  margin-top: 8px;
+}
+
+.student-filter__title {
+  margin-bottom: 8px;
+}
+
+.student-filter__footer {
+  padding-top: 12px;
+  display: flex;
+  align-items: center;
+  border-top: 2px solid black;
+  justify-content: space-between;
+}
+
+.student-filter__clear {
+  font-size: 14px;
+  text-decoration: underline;
+  transition: color 0.3s ease;
+}
+
+/* Hover và active cho nút xóa bộ lọc */
+.student-filter__clear:hover {
+  color: red;
+  cursor: pointer;
+}
+
+.student-filter__clear:active {
+  color: darkred;
+}
+
+.logout-menu {
+  position: fixed;
+  right: 12px;
+  top: 12px;
+  font-weight: bold;
+  z-index: 5;
+}
+
+.logout-menu__content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.account-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 2px solid #333;
+  border-radius: 50%;
+  font-size: 16px;
+  background-color: #f5f5f5;
+  transition: all 0.3s ease;
+  margin-right: 8px;
+}
+
+.account-icon:hover {
+  background-color: #ddd;
+  cursor: pointer;
+}
+
+.logout-menu__action {
+  transition: color 0.3s ease;
+}
+
+.logout-menu__action:hover {
+  color: red;
+  cursor: pointer;
+}
+
+.logout-menu__action:active {
+  color: darkred;
+}

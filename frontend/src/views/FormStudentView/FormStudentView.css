@@ -1,0 +1,125 @@
+.student-form {
+  position: fixed;
+  width: 60%;
+  min-width: unset;
+  max-width: 1000px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  border: 1px solid black;
+  border-radius: 5px;
+  z-index: 7;
+  padding: 16px;
+}
+
+.student-form__error {
+  color: red;
+  margin-top: 4px;
+  text-align: justify;
+}
+
+.student-form__row {
+  display: flex;
+}
+
+.student-form__input {
+  margin-right: 16px;
+  margin-top: 16px;
+  width: 40%;
+}
+
+.student-form__input--address {
+  width: 100%;
+}
+
+.student-form__input--email {
+  width: 60%;
+}
+
+.student-form__input--class {
+  width: 20%;
+}
+
+@media (max-width: 1500px) {
+  .student-form__row {
+    flex-wrap: wrap;
+  }
+
+  .student-form__input--id,
+  .student-form__input--name {
+    width: 40%;
+  }
+
+  .student-form__input--phone,
+  .student-form__input--email {
+    width: 40%;
+  }
+}
+
+@media (max-width: 1200px) {
+  .student-form__input--id,
+  .student-form__input--name {
+    width: 100%;
+  }
+
+  .student-form__input--phone,
+  .student-form__input--email {
+    width: 100%;
+  }
+
+  .student-form__input--dob {
+    width: 50%;
+  }
+}
+
+.student-form__header {
+  font-size: 24px;
+  font-weight: bold;
+  padding: 12px 0;
+}
+
+.student-form__gender-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 130px;
+  height: 32px;
+}
+
+.student-form__title {
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+
+.student-form__footer {
+  padding-top: 12px;
+  width: 100%;
+  border-top: 2px solid black;
+  margin-top: 24px;
+  display: flex;
+  justify-content: right;
+}
+
+.student-form__buttons {
+  width: 300px;
+  text-align: right;
+}
+
+.student-form__button--confirm {
+  margin-right: 8px;
+}
+
+.overlay-form {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.6); /* Làm tối nền mạnh hơn */
+  backdrop-filter: blur(5px); /* Hiệu ứng mờ nền */
+  z-index: 8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

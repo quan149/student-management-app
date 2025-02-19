@@ -1,0 +1,32 @@
+.dialog {
+    position: fixed;
+    width: 480px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    border: 1px solid black;
+    border-radius: 5px;
+    z-index: 10;
+    padding: 16px 16px;
+}
+
+.dialog__header {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.dialog__body {
+    padding-top: 12px;
+}
+
+.dialog__buttons {
+    display: flex;
+    justify-content: right;
+    align-items: center;
+    padding-top: 12px;
+}
+
+.dialog__button--left {
+    margin-right: 8px;
+}
