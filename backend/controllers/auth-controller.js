@@ -53,6 +53,6 @@ exports.register = async (req, res) => {
     res.json({ message: "Đăng ký thành công!", user: newUser });
   } catch (err) {
     console.error("Lỗi hệ thống:", err);
-    res.status(500).json({ error: "Email đã tồn tại hoặc lỗi hệ thống!" });
+    res.status(500).json({ error: "Tên đăng nhập đã tồn tại hoặc lỗi hệ thống!" });
   }
 };
