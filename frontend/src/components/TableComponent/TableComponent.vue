@@ -114,18 +114,17 @@
       <div class="pagination__navigation">
         <div class="pagination__pre">
           <ButtonComponent
-            class="pagination__button"
-            :is_disable="isDisablePre"
-            :action="firstPage"
-            :is_pagination="true"
+            class="pagination__button btn-left"
+            :disable="isDisablePre"
+            @click="firstPage"
           >
             <div><i class="pi pi-angle-double-left" style="font-size: 1rem"></i></div>
           </ButtonComponent>
           <ButtonComponent
-            class="pagination__button"
-            :is_disable="isDisablePre"
-            :action="previousPage"
-            :is_pagination="true"
+            class="pagination__button btn-left"
+            :disable="isDisablePre"
+            @click="previousPage"
+  
           >
             <div><i class="pi pi-angle-left" style="font-size: 1rem"></i></div>
           </ButtonComponent>
@@ -145,18 +144,16 @@
 
         <div class="pagination__next">
           <ButtonComponent
-            class="pagination__button"
-            :is_disable="isDisableNext"
-            :action="nextPage"
-            :is_pagination="true"
+            class="pagination__button btn-left"
+            :disable="isDisableNext"
+            @click="nextPage"
           >
             <div><i class="pi pi-angle-right" style="font-size: 1rem"></i></div>
           </ButtonComponent>
           <ButtonComponent
             class="pagination__button"
-            :is_disable="isDisableNext"
-            :action="lastPage"
-            :is_pagination="true"
+            :disable="isDisableNext"
+            @click="lastPage"
           >
             <div><i class="pi pi-angle-double-right" style="font-size: 1rem"></i></div>
           </ButtonComponent>

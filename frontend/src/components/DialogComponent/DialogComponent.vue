@@ -1,5 +1,5 @@
 <template>
-  <div class="dialog" v-if="showDialog">
+  <div class="dialog-overlay" v-if="show">
     <div class="dialog__header">
       <div class="dialog__title">
         <slot name="title-header-dialog"></slot>
@@ -11,34 +11,31 @@
       </div>
     </div>
     <div class="dialog__buttons">
-      <ButtonComponent :action="props.actionAccept" class="dialog__button--left" v-if="props.showSubmit">
+      <ButtonComponent :type="'primary'" class="dialog__button--left" @click="submit">
         <div>Xác nhận</div>
       </ButtonComponent>
-      <ButtonComponent :action="props.actionCancel" :is_delete="true">
-        <div>Đóng</div>
+      <ButtonComponent :type="'secondary'" @click="close" v-if="showCancel">
+        <div>Hủy</div>
       </ButtonComponent>
     </div>
   </div>
 </template>
 
 <script setup>
-import "./DialogComponent.css";
+import { defineProps, defineEmits } from "vue";
 import ButtonComponent from "../ButtonComponent/ButtonComponent.vue";
-import { ref, defineProps, watch } from "vue";
 
-const showDialog = ref(false);
-
-const props = defineProps({
-  show: Boolean,
-  actionAccept: Function,
-  actionCancel: Function,
-  showSubmit: Boolean
+defineProps({
+  show: Boolean, // Hiển thị dialog
+  // Hiển thị nút HỦY hay không
+  showCancel: { 
+    type: Boolean, 
+    default: true 
+  },
 });
 
-watch(
-    () => props.show,
-    (newData) => {
-        showDialog.value = newData
-    }
-)
+const emit = defineEmits(["close", "submit"]);
+
+const close = () => emit("close");
+const submit = () => emit("submit");
 </script>

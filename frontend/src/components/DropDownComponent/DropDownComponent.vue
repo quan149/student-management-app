@@ -11,10 +11,9 @@ import "./DropDownComponent.css";
 import { defineProps, ref, watch, onBeforeUnmount } from "vue";
 
 const props = defineProps({
-  value: null,
-  list_options: Array,
-  is_above: Boolean,
-  is_disable: Boolean
+  value: null, // Giá trị truyền vào DropdownComponent
+  is_above: Boolean, // Hiển thị danh sách lựa chọn ở trên
+  is_disable: Boolean // Input có phải disable hay không
 });
 
 const menu = ref(null);

@@ -27,11 +27,11 @@
         </div>
       </div>
       <div class="login-form__footer">
-        <ButtonComponent :action="submitLogin">Đăng nhập</ButtonComponent>
+        <ButtonComponent :type="'primary'" @click="submitLogin">Đăng nhập</ButtonComponent>
       </div>
     </div>
   </div>
-  <DialogComponent :show="showDialog" :action-cancel="handleHiddenDialog">
+  <DialogComponent @click="handleHiddenDialog">
     <template #title-header-dialog>ĐĂNG NHẬP KHÔNG THÀNH CÔNG</template>
     <template #content-dialog>Tài khoản hoặc mật khẩu không đúng</template>
   </DialogComponent>

@@ -159,6 +159,10 @@
   background-color: #3999ff;
 }
 
+.pagination__button .btn-left {
+  margin-right: 8px;
+}
+
 .pagination__limit {
   display: flex;
   justify-content: space-between;
