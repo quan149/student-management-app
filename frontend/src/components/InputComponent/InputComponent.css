@@ -6,6 +6,8 @@
   outline: none;
   transition: border-color 0.3s ease-in-out;
   width: 100%;
+  font-family: "Arial", sans-serif;
+  font-size: 14px; 
 }
 
 .input--error {
@@ -63,6 +65,11 @@
   opacity: 1;
 }
 
+.input-radio-group {
+  display: flex;
+  align-items: center;
+}
+
 .input-radio {
   appearance: none;
   width: 16px;
@@ -95,8 +102,6 @@
   border-color: red;
 }
 
-.label {
+.input-radio__label {
   margin-top: 2px;
-  display: flex;
-  align-items: center;
 }

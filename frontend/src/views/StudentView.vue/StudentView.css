@@ -94,7 +94,11 @@
 /* Hover cho button */
 .button-group {
   margin-right: 8px;
-  padding: 6px 12px;
+  margin-left: 8px;
+  height: 36px;
+  display: flex;
+  text-align: center;
+  justify-content: center;
   transition: all 0.3s ease;
 }
 

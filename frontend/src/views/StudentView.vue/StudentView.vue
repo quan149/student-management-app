@@ -18,23 +18,17 @@
     <template #title-header>{{ titleFormInput }}</template>
   </FormStudentView>
 
-  <DialogComponent :show="showDialog" :action-cancel="handleHiddenDailog">
-    <template #title-header-dialog>
-      <i class="pi pi-exclamation-triangle" style="font-size: 1rem; color: red"></i>
-      Xóa học sinh
-    </template>
-    <template #content-dialog>Bạn có chắc chắn muốn xóa các học sinh đã được chọn không?</template>
+  <DialogComponent :show="showDialog" @close="handleHiddenDailog" :content="content" :header="header">
   </DialogComponent>
 
   <div class="student-update-modal" v-if="showUpdateClass">
     <div class="student-update__header">
-      <div class="student-update__title">Chọn lớp cần chuyển</div>
+      <div class="student-update__title">{{ notifyMessage.changeClass.header }}</div>
     </div>
     <div class="student-update__body">
       <div class="student-update__info">
         <i class="pi pi-question-circle" style="font-size: 1rem; color: red"></i>
-        Bạn muốn cập nhật lớp cho các học sinh có mã học sinh là:
-        <span class="student-list__ids">{{ selectedStudentIds }}</span>
+        {{ notifyMessage.changeClass.content(selectedStudentIds) }}
       </div>
       <div class="class-selection">
         <div class="class-selection__label">Lớp sau khi thay đổi:</div>
@@ -51,14 +45,12 @@
         </DropDownComponent>
       </div>
       <div class="content-section">
-        Sau khi cập nhật, những học sinh này sẽ không trong phạm vi quản lý của bạn nữa. Hãy chắc
-        chắn trước khi <span class="content-section--highlight">XÁC NHẬN</span> hoặc chọn
-        <span class="content-section--highlight">HỦY</span> quay trở lại trang quản lý học sinh.
+        {{ notifyMessage.changeClass.note }}
       </div>
     </div>
     <div class="student-update__footer">
-      <ButtonComponent class="button-group" :action="handleUpdateClass">Xác nhận</ButtonComponent>
-      <ButtonComponent :is_delete="true" :action="handleHiddenUpdateClass">Hủy</ButtonComponent>
+      <ButtonComponent type="primary" class="button-group" @click="handleUpdateClass">Xác nhận</ButtonComponent>
+      <ButtonComponent type="warning" @click="handleHiddenUpdateClass">Hủy</ButtonComponent>
     </div>
   </div>
 
@@ -92,11 +84,11 @@
           <div class="student-filter__body">
             <div class="student-filter__criteria">
               <div class="student-filter__title">Họ và tên học sinh</div>
-              <InputComponent :is_text="true" v-model="filterByName"></InputComponent>
+              <InputComponent type="text" v-model="filterByName"></InputComponent>
             </div>
             <div class="student-filter__criteria">
               <div class="student-filter__title">Địa chỉ</div>
-              <InputComponent :is_text="true" v-model="filterByAddress"></InputComponent>
+              <InputComponent type="text" v-model="filterByAddress"></InputComponent>
             </div>
             <div class="student-filter__criteria" v-if="!checkedRole">
               <div class="student-filter__title">Lớp học</div>
@@ -115,7 +107,7 @@
           </div>
           <div class="student-filter__footer">
             <div class="student-filter__clear" @click="clearFilterCriteria">Xóa điều kiện lọc</div>
-            <ButtonComponent :action="handleFilterStudent"><div>Xác nhận</div></ButtonComponent>
+            <ButtonComponent @click="handleFilterStudent"><div>Xác nhận</div></ButtonComponent>
           </div>
         </div>
       </template>
@@ -125,10 +117,9 @@
       <template #other-button>
         <ButtonComponent
           v-if="checkedRole"
-          :is_update="selectedStudentIds.length !== 0"
+          :type="(selectedStudentIds.length !== 0) ? 'warning' : 'disabled'"
           class="button-group"
-          :is_disable="selectedStudentIds.length === 0"
-          :action="handleShowUpdateClass"
+          @click="handleShowUpdateClass"
           >Chuyển lớp</ButtonComponent
         >
       </template>
@@ -139,6 +130,7 @@
 <script setup>
 import { ref, watch, onMounted, defineEmits, computed } from "vue";
 import { useApi } from "@/composables/useApi.js";
+import { notifyMessage } from "@/constants/notifyMessage";
 import TableComponent from "@/components/TableComponent/TableComponent.vue";
 import ButtonComponent from "@/components/ButtonComponent/ButtonComponent.vue";
 import DropDownComponent from "@/components/DropDownComponent/DropDownComponent.vue";
@@ -148,8 +140,11 @@ import DialogComponent from "@/components/DialogComponent/DialogComponent.vue";
 import FormStudentView from "../FormStudentView/FormStudentView.vue";
 import InputComponent from "@/components/InputComponent/InputComponent.vue";
 import router from "@/components/router";
+import { useDialog } from "@/composables/useDialog";
 
 const api = useApi();
+const {showDialog, header, content, openDialog, closeDialog} = useDialog()
+
 const currentPage = ref(1);
 const itemsPerPage = ref(10);
 const searchName = ref("");
@@ -162,7 +157,6 @@ const selectedStudentIds = ref("");
 const newClass = ref("");
 const showUpdateClass = ref(false);
 const idNewClass = ref("");
-const showDialog = ref(false);
 const showFormInput = ref(false);
 const titleFormInput = ref("");
 const typeForm = ref("");
@@ -289,14 +283,12 @@ const handleHiddenUpdateClass = () => {
 
 // Xử lý tắt màn hình dialog
 const handleHiddenDailog = () => {
-  showDialog.value = false;
-  emit("updateShowOverlay", false);
+  closeDialog()
 };
 
 // Xử lý bật màn hình dialog
 const handleShowDailog = () => {
-  showDialog.value = true;
-  emit("updateShowOverlay", true);
+  openDialog(notifyMessage.deleteStudent.header, notifyMessage.deleteStudent.content)
 };
 
 // Xử lý tắt màn hình dialog

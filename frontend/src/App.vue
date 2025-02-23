@@ -1,7 +1,7 @@
 <template>
   <div class="overlay" v-if="show"></div>
   <div>
-    <router-view @updateShowOverlay="handleShowOverlay" />
+    <router-view />
   </div>
 </template>
 
@@ -10,9 +10,6 @@ import { ref} from "vue";
 import "primeicons/primeicons.css";
 
 const show = ref(false);
-const handleShowOverlay = (newValue) => {
-  show.value = newValue;
-};
 </script>
 <style>
 .overlay {

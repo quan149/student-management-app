@@ -1,61 +1,55 @@
 <template>
   <input
-    v-if="['text', 'email', 'password', 'date'].includes(type)"
+    v-if="['text', 'password', 'date'].includes(type)"
     :type="type"
-    :value="modelValue"
-    @input="updateValue($event.target.value)"
+    class="input"
     :placeholder="placeholder"
+    v-model="inputValue"
+    :disabled="is_disable"
   />
 
-  <div v-else-if="type === 'radio'">
-    <label v-for="option in options" :key="option.value">
-      <input
-        type="radio"
-        :name="name"
-        :value="option.value"
-        :checked="modelValue === option.value"
-        @change="updateValue(option.value)"
-      />
-      {{ option.label }}
-    </label>
-  </div>
+  <input
+    v-else-if="type === 'checkbox'"
+    type="checkbox"
+    class="input-checkbox"
+    v-model="inputValue"
+  />
 
-  <div v-else-if="type === 'checkbox'">
-    <label v-for="option in options" :key="option.value">
-      <input
-        type="checkbox"
-        :value="option.value"
-        :checked="modelValue.includes(option.value)"
-        @change="toggleCheckbox(option.value)"
-      />
-      {{ option.label }}
-    </label>
+  <div v-else-if="type === 'radio'" class="input-radio-group">
+    <input
+      type="radio"
+      class="input-radio"
+      :value="value"
+      v-model="inputValue"
+      :disabled="is_disable"
+      :id="id"
+      :name="name"
+    />
+    <label class="input-radio__label" :for="id">{{ label }}</label>
   </div>
 </template>
 
 <script setup>
-import { defineProps, defineEmits} from "vue";
+import { defineProps, defineEmits, computed } from "vue";
 import "./InputComponent.css";
 const props = defineProps({
-  modelValue: [String, Array],
-  type: { type: String, required: true },
-  options: { type: Array, default: () => [] },
-  label: String,
+  type: {
+    type: String,
+    default: "text",
+  },
   placeholder: String,
-  name: String, // Dùng cho radio
+  modelValue: [String, Boolean],
+  is_disable: Boolean,
+  value: [String, Number, Boolean],
+  id: String,
+  name: String,
+  label: String,
 });
 
 const emit = defineEmits(["update:modelValue"]);
 
-const updateValue = (value) => {
-  emit("update:modelValue", value);
-};
-
-const toggleCheckbox = (value) => {
-  const newValue = props.modelValue.includes(value)
-    ? props.modelValue.filter((item) => item !== value)
-    : [...props.modelValue, value];
-
-  emit("update:modelValue", newValue);
-};
+const inputValue = computed({
+  get: () => props.modelValue,
+  set: (value) => emit("update:modelValue", value),
+});
 </script>

@@ -1,28 +1,25 @@
 <template>
-  <button :class="['btn', type, {'disable': disable}]"  @click="handleClick">
+  <div 
+    @click="emit('click', $event)" 
+    :class="(type === 'pagination') ?`button--${type}` : `button button--${type}`" 
+  >
     <slot></slot>
-  </button>
+  </div>
 </template>
 
 <script setup>
-import "./ButtonComponent.css";
-
-import { defineProps, defineEmits } from "vue";
+import './ButtonComponent.css'
+import { defineEmits, defineProps } from 'vue';
 
 defineProps({
+  // Kiểu button, nhận giá trị primary, secondary, warning, danger, pagination, disable
   type: {
-    // Kiểu của button
-    // Có thể nhận các giá trị primary, secondary, danger
-    type: String, 
-    default: "primary",
-    disable: Boolean
-  },
+    type: String,
+    default: 'primary'
+   } 
 });
 
 const emit = defineEmits(["click"]);
-
-// Emit hành động click lên component cha
-const handleClick = () => {
-  emit("click");
-};
 </script>
+
+

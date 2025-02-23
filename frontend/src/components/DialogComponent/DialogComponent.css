@@ -1,3 +1,16 @@
+.dialog-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5); /* Overlay mờ */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 11;
+}
+
 .dialog {
   position: fixed;
   width: 480px;
@@ -7,17 +20,22 @@
   background-color: white;
   border: 1px solid black;
   border-radius: 5px;
-  z-index: 10;
+  z-index: 12;
   padding: 16px 16px;
 }
 
 .dialog__header {
-  font-size: 20px;
+  font-size: 18px;
   font-weight: bold;
 }
 
 .dialog__body {
   padding-top: 12px;
+}
+
+.dialog__content {
+  font-family: "Arial", sans-serif;
+  font-size: 14px; 
 }
 
 .dialog__buttons {
@@ -29,17 +47,4 @@
 
 .dialog__button--left {
   margin-right: 8px;
-}
-
-.dialog-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 10;
 }

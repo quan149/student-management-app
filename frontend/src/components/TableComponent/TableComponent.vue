@@ -4,7 +4,7 @@
       <h2>Danh Sách Học Sinh</h2>
       <div class="table-actions__header">
         <div class="table-actions__header-left">
-          <ButtonComponent class="table__button" :action="action_filter">
+          <ButtonComponent class="table__button" type="primary" @click="action_filter">
             <div><slot name="name-button-filter"></slot></div>
           </ButtonComponent>
           <slot name="filter-form"></slot>
@@ -19,35 +19,32 @@
         </div>
         <div class="table-actions__header-right">
           <div class="table__select-column">
-            <ButtonComponent :action="setShowColumn" class="table__button">
+            <ButtonComponent type="primary" @click="setShowColumn" class="table__button">
               <div>Chọn</div>
             </ButtonComponent>
             <div class="table__overlay" ref="overlay" :class="{ 'table__overlay--show': show }">
               <div>Chọn các cột của bảng</div>
               <div class="table__label-container">
                 <label v-for="column in columns" :key="column.id" class="table__label">
-                  <InputComponent v-model:modelChecked="column.show" :is_checkbox="true" />
+                  <InputComponent v-model="column.show" type="checkbox" />
                   {{ column.name }}
                 </label>
               </div>
             </div>
           </div>
-          <ButtonComponent class="table__button" :action="action_add" v-if="checkedRole">
+          <ButtonComponent type="primary" class="table__button" @click="action_add" v-if="checkedRole">
             <div><slot name="name-button-create"></slot></div>
           </ButtonComponent>
           <ButtonComponent
             class="table__button"
-            :is_update="isSelectedOnlyRow"
-            :action="action_update"
-            :is_disable="!isSelectedOnlyRow"
+            :type="isSelectedOnlyRow ? 'warning' : 'disabled'"
+            @click="action_update"
           >
             <div><slot name="name-button-update"></slot></div>
           </ButtonComponent>
           <ButtonComponent
-            :action="action_delete"
-            :is_disable="isSelectedRowEmpty"
-            :is_delete="true"
-            class="table__button"
+            @click="action_delete"
+            :type="!isSelectedRowEmpty ? 'warning' : 'disabled'"
           >
             <div><slot name="name-button-delete"></slot></div>
           </ButtonComponent>
@@ -63,9 +60,9 @@
             <th class="table__header">
               <div class="table__checkbox">
                 <InputComponent
-                  :is_checkbox="true"
-                  v-model:modelChecked="isSelectedAll"
-                  @update:modelChecked="updateCheckboxAll"
+                  type="checkbox"
+                  v-model="isSelectedAll"
+                  @update:modelValue="updateCheckboxAll"
                 />
               </div>
             </th>
@@ -84,7 +81,7 @@
           >
             <td class="table__cell">
               <div class="table__checkbox">
-                <InputComponent :is_checkbox="true" :modelChecked="isCheckedRow(row)" />
+                <InputComponent type="checkbox" :modelValue="isCheckedRow(row)" />
               </div>
             </td>
             <td v-for="column in columns" :key="column.id" class="table__cell" v-show="column.show">
@@ -114,17 +111,16 @@
       <div class="pagination__navigation">
         <div class="pagination__pre">
           <ButtonComponent
-            class="pagination__button btn-left"
-            :disable="isDisablePre"
+            class="pagination__button"
             @click="firstPage"
+            type="pagination"
           >
             <div><i class="pi pi-angle-double-left" style="font-size: 1rem"></i></div>
           </ButtonComponent>
           <ButtonComponent
-            class="pagination__button btn-left"
-            :disable="isDisablePre"
+            class="pagination__button"
             @click="previousPage"
-  
+             type="pagination"
           >
             <div><i class="pi pi-angle-left" style="font-size: 1rem"></i></div>
           </ButtonComponent>
@@ -144,16 +140,16 @@
 
         <div class="pagination__next">
           <ButtonComponent
-            class="pagination__button btn-left"
-            :disable="isDisableNext"
+            class="pagination__button"
             @click="nextPage"
+            type="pagination"
           >
             <div><i class="pi pi-angle-right" style="font-size: 1rem"></i></div>
           </ButtonComponent>
           <ButtonComponent
             class="pagination__button"
-            :disable="isDisableNext"
             @click="lastPage"
+            type="pagination"
           >
             <div><i class="pi pi-angle-double-right" style="font-size: 1rem"></i></div>
           </ButtonComponent>
@@ -190,8 +186,6 @@ const emit = defineEmits([
   "updateSelectedRows",
   "update:searchQuery",
 ]);
-const isDisablePre = computed(() => props.page === 1);
-const isDisableNext = computed(() => props.page === props.totalPages);
 const isSelectedAll = ref(false);
 const selectedRows = ref({});
 const show = ref(false);
@@ -246,7 +240,6 @@ const setShowColumn = (event) => {
   // Ngừng sự kiện click khi nhấn vào nút, không thực hiện sự kiện ngoài
   event.stopPropagation();
   show.value = !show.value;
-  console.log(show.value);
 };
 
 const updatePageState = (newPage) => {

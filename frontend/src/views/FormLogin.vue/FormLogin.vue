@@ -10,7 +10,7 @@
             <i class="pi pi-user-edit" style="font-size: 1rem"></i> Tên đăng nhập
           </div>
           <InputComponent
-            :is_text="true"
+            type="text"
             placeholder="Nhập tên đăng nhập tại đây"
             v-model="username"
           />
@@ -20,20 +20,18 @@
             <i class="pi pi-key" style="font-size: 1rem"></i> Mật khẩu
           </div>
           <InputComponent
-            :is_password="true"
+            type="password"
             placeholder="Nhập mật khẩu tại đây"
             v-model="password"
           />
         </div>
       </div>
       <div class="login-form__footer">
-        <ButtonComponent :type="'primary'" @click="submitLogin">Đăng nhập</ButtonComponent>
+        <ButtonComponent type="primary" @click="submitLogin">Đăng nhập</ButtonComponent>
       </div>
     </div>
   </div>
-  <DialogComponent @click="handleHiddenDialog">
-    <template #title-header-dialog>ĐĂNG NHẬP KHÔNG THÀNH CÔNG</template>
-    <template #content-dialog>Tài khoản hoặc mật khẩu không đúng</template>
+  <DialogComponent :show="showDialog" :header="header" :content="content" @close="handleHiddenDialog">
   </DialogComponent>
 </template>
 
@@ -45,11 +43,13 @@ import "primeicons/primeicons.css";
 import { ref } from "vue";
 import router from "@/components/router";
 import { useApi } from "@/composables/useApi";
+import { errorAuth } from '@/constants/errorMessage'
+import { useDialog } from "@/composables/useDialog";
 import DialogComponent from "@/components/DialogComponent/DialogComponent.vue";
 
 const username = ref("");
 const password = ref("");
-const showDialog = ref(false);
+const {showDialog, header, content, openDialog, closeDialog} = useDialog();
 
 const api = useApi();
 const submitLogin = async () => {
@@ -67,11 +67,11 @@ const submitLogin = async () => {
     }
   } catch (err) {
     console.error("Lỗi khi đăng nhập:", err.response?.data?.message || err.message);
-    showDialog.value = true;
+    openDialog(errorAuth.invalid_credentials.header, errorAuth.invalid_credentials.content);
   }
 };
 
 const handleHiddenDialog = () => {
-  showDialog.value = false;
+  closeDialog();
 };
 </script>

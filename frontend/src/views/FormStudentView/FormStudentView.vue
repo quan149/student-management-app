@@ -1,6 +1,11 @@
 <template>
-  <div class="overlay-form" v-if="showDialog"></div>
-  <DialogComponent :show="showDialog" :action-cancel="handleHiddenDialog">
+  <div class="overlay-form" v-if="show"></div>
+  <DialogComponent
+    :show="showDialog"
+    :content="content"
+    :header="header"
+    @close="handleHiddenDialog"
+  >
     <template #title-header-dialog>{{ titleDialog }}</template>
     <template #content-dialog>
       <div v-for="(content, index) in contentDialog" :key="index" style="margin-top: 6px">
@@ -23,43 +28,40 @@
         <div class="student-form__input student-form__input--id">
           <div class="student-form__title">Mã học sinh</div>
           <InputComponent
-            :is_text="true"
+            type="text"
             :is_disable="true"
             v-model="student.studentId"
           ></InputComponent>
         </div>
         <div class="student-form__input student-form__input--name">
           <div class="student-form__title">Họ và tên</div>
-          <InputComponent
-            :is_text="true"
-            v-model="student.fullName"
-          ></InputComponent>
+          <InputComponent type="text" v-model="student.fullName" ref="fullNameInput"></InputComponent>
         </div>
         <div class="student-form__input student-form__input--dob">
           <div class="student-form__title">Ngày sinh</div>
           <InputComponent
-            :is_date-picker="true"
-            v-model:modelDatePicker="student.selectedDate"
+            type="date"
+            v-model="student.selectedDate"
           ></InputComponent>
         </div>
         <div class="student-form__input student-form__input--gender">
           <div class="student-form__title">Giới tính</div>
           <div class="student-form__gender-options">
             <InputComponent
-              :is_radio="true"
+              type="radio"
               id="male"
               name="gender"
               value="Nam"
               label="Nam"
-              v-model:modelRadio="student.gender"
+              v-model="student.gender"
             ></InputComponent>
             <InputComponent
-              :is_radio="true"
+              type=radio
               id="female"
               name="gender"
               value="Nữ"
               label="Nữ"
-              v-model:modelRadio="student.gender"
+              v-model="student.gender"
             ></InputComponent>
           </div>
         </div>
@@ -68,38 +70,36 @@
       <div class="student-form__row">
         <div class="student-form__input student-form__input--address">
           <div class="student-form__title">Địa chỉ</div>
-          <InputComponent
-            :is_text="true"
-            v-model="student.address"
-          ></InputComponent>
+          <InputComponent type="text" v-model="student.address"></InputComponent>
         </div>
       </div>
 
       <div class="student-form__row">
         <div class="student-form__input student-form__input--phone">
           <div class="student-form__title">Số điện thoại</div>
-          <InputComponent
-            :is_text="true"
-            v-model="student.phone"
-          ></InputComponent>
+          <InputComponent type="text" v-model="student.phone"></InputComponent>
         </div>
         <div class="student-form__input student-form__input--email">
           <div class="student-form__title">Địa chỉ email</div>
-          <InputComponent :is_text="true" v-model="student.email"></InputComponent>
+          <InputComponent type="text" v-model="student.email"></InputComponent>
         </div>
       </div>
 
       <div class="student-form__row">
         <div class="student-form__input student-form__input--class">
           <div class="student-form__title">Lớp học</div>
-          <DropDownComponent :value="currentClass" :is_disable="true" class="student-form__dropdown">
+          <DropDownComponent
+            :value="currentClass"
+            :is_disable="true"
+            class="student-form__dropdown"
+          >
           </DropDownComponent>
         </div>
         <div class="student-form__input student-form__input--grade">
           <div class="student-form__title">Khối học</div>
           <InputComponent
             :is_disable="true"
-            :is_text="true"
+            type="text"
             v-model="currentGrade"
           ></InputComponent>
         </div>
@@ -111,13 +111,13 @@
       <div class="student-form__buttons">
         <ButtonComponent
           class="student-form__button student-form__button--confirm"
-          :action="handleSubmitFormInput"
+          @click="handleSubmitFormInput"
         >
           <div>Xác nhận</div>
         </ButtonComponent>
         <ButtonComponent
-          :is_delete="true"
-          :action="action_hidden"
+          type="warning"
+          @click="action_hidden"
           class="student-form__button student-form__button--cancel"
         >
           <div>Hủy</div>
@@ -130,18 +130,19 @@
 <script setup>
 import InputComponent from "@/components/InputComponent/InputComponent.vue";
 import "./FormStudentView.css";
-import { ref, onMounted, watch } from "vue";
+import { ref, onMounted, watch, nextTick } from "vue";
 import DropDownComponent from "@/components/DropDownComponent/DropDownComponent.vue";
 import { useApi } from "@/composables/useApi";
+import { useDialog } from "@/composables/useDialog";
 import ButtonComponent from "@/components/ButtonComponent/ButtonComponent.vue";
 import DialogComponent from "@/components/DialogComponent/DialogComponent.vue";
 import { useValidation } from "@/composables/validateInput";
 import "primeicons/primeicons.css";
-import { stringMessages } from "@/composables/stringMessage";
+import { successFormInput } from "@/constants/successMessage";
+import { errorFormInput } from "@/constants/errorMessage";
 
 const api = useApi();
-const { titleForm } = stringMessages();
-
+const {showDialog, header, content, openDialog, closeDialog} = useDialog();
 const props = defineProps({
   show: Boolean,
   action_hidden: Function,
@@ -154,7 +155,7 @@ const classList = ref([]);
 const currentGrade = ref("");
 const currentClass = ref("");
 const typeDialog = ref("");
-const showSubmitButton = ref(false);
+const fullNameInput = ref(null);
 const student = ref({
   studentId: "",
   fullName: "",
@@ -166,7 +167,6 @@ const student = ref({
   classId: Number(localStorage.getItem("user")),
   gradeId: 0,
 });
-const showDialog = ref(false);
 const titleDialog = ref("");
 const contentDialog = ref("");
 
@@ -224,7 +224,7 @@ const setClassAndGrade = () => {
 
 // Hành động ẩn dialog thông báo
 const handleHiddenDialog = () => {
-  showDialog.value = false;
+  closeDialog()
 };
 
 // Hành động submit form để thêm học sinh mới
@@ -247,20 +247,10 @@ const handleSubmitFormInput = async () => {
       try {
         const response = await api.post(`/students/create-student`, newStudent);
         console.log(response.data);
-        showDialog.value = true;
-        titleDialog.value = titleForm.createStudent.success;
-        typeDialog.value = "success";
-        showSubmitButton.value = true;
-        contentDialog.value = [
-          `Bạn đã thêm học sinh có mã học sinh là ${newStudent.student_id} và tên là ${newStudent.full_name}`,
-        ];
+        openDialog(successFormInput.created_success.header, successFormInput.created_success.content(newStudent))
       } catch (error) {
         console.error("Lỗi khi lấy dữ liệu lớp:", error);
-        showDialog.value = true;
-        typeDialog.value = "error";
-        titleDialog.value = titleForm.createStudent.fail;
-        contentDialog.value = ["Đã xảy ra lỗi khi thêm học sinh"];
-        showSubmitButton.value = false;
+        openDialog(errorFormInput.created_success.header, errorFormInput.created_success.content(newStudent))
       }
     } else if (props.type === "update") {
       try {
@@ -268,24 +258,14 @@ const handleSubmitFormInput = async () => {
           `/students/update-student/${newStudent.student_id}`,
           newStudent
         );
-        showDialog.value = true;
-        titleDialog.value = titleForm.updateStudent.success;
-        typeDialog.value = "success";
-        contentDialog.value = [
-          `Bạn đã thay đổi thông tin của học sinh có mã học sinh là ${newStudent.student_id}`,
-        ];
+        openDialog(successFormInput.updated_success.header, successFormInput.updated_success.content(newStudent))
         console.log(response.data);
       } catch (error) {
         console.error("Lỗi khi lấy dữ liệu lớp:", error);
       }
     }
   } else {
-    typeDialog.value = "error";
-    showDialog.value = true;
-    titleDialog.value = titleForm.createStudent.fail;
-    console.log(validationErrors);
-    contentDialog.value = validationErrors;
-    showSubmitButton.value = false;
+    openDialog((props.type === 'create') ? errorFormInput.created_failed.header : errorFormInput.updated_failed.header, validationErrors)
   }
 };
 
@@ -343,4 +323,14 @@ watch(
 watch(() => student.value.classId, () => {
   setClassAndGrade();
 });
+
+watch(
+  () => props.show,
+  async (newValue) => {
+    if (newValue) {
+      await nextTick(); 
+      fullNameInput.value?.$el?.focus();
+    }
+  }
+);
 </script>
